@@ -20,6 +20,7 @@ from typing import Dict, List, Optional, Tuple
 import xml.etree.ElementTree as ET
 import requests
 import shapely.geometry
+import defusedxml.ElementTree
 
 Polygon = shapely.geometry.polygon.Polygon
 Point = shapely.geometry.point.Point
@@ -35,7 +36,7 @@ def _read_nodes(xml: str, region: Polygon) -> Dict[str, Point]:
   Returns:
     Dictionary mapping node id to (longitude, latitude) points.
   """
-  root = ET.fromstring(xml)
+  root = defusedxml.ElementTree.fromstring(xml)
   nodes = {}
   for element in root:
     if element.tag == 'node':
@@ -88,7 +89,7 @@ def _read_polygons(xml: str, nodes: Dict[str, Point]) -> List[Polygon]:
   Returns:
     List of polygons.
   """
-  root = ET.fromstring(xml)
+  root = defusedxml.ElementTree.fromstring(xml)
   polygons = []
   for element in root:
     if element.tag == 'way':
